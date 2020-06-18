@@ -1,9 +1,9 @@
 // Echo Client - send a message to an Echo Server and wait for the reply
-// 
+//
 // java  -jar MyEchoServer.jar [-q] <ListenerPort>
 //
 //     where:  ListenerPort      is the listener port of the EchoServer
-//             -q                disable log messages of connections and timeouts 
+//             -q                disable log messages of connections and timeouts
 //
 
 import java.net.*;
@@ -12,30 +12,30 @@ import java.util.*;
 import java.text.*;
 
 public class MyEchoServer extends Thread {
-	
+
 	protected static boolean serverContinue = true;
 	protected Socket clientSocket;
-	
+
 	public static void main(String[] args) throws IOException {
-		
-		String version = new String( "MyEchoServer - Version 1.0.0" );
-		
+
+		String version = new String( "MyEchoServer - Version 1.1.0" );
+
 		ServerSocket serverSocket = null;
 
-		int serverPort = 10080;
+		int serverPort = 1080;
         int myTimeout = 10000;
         int quietFlag = 0;
         
         if ( args.length == 0 || args.length > 2 ) {
         	usage();
-        }        
-        
+        }
+
         if ( args.length == 1 ) {
     		System.out.println( getMyMessagePrefix() + " listener port from command line is: " + args[0] );
     		serverPort = Integer.parseInt( args[0] );
     		System.out.println( getMyMessagePrefix() + " listener port set to: " + serverPort );
         }
-        
+
         if ( args.length == 2 ) {
     		System.out.println( getMyMessagePrefix() + " command line option: " + args[0] );
     		if ( args[0] == "-q" ) {
@@ -48,7 +48,7 @@ public class MyEchoServer extends Thread {
     		serverPort = Integer.parseInt( args[1] );
     		System.out.println( getMyMessagePrefix() + " listener port set to: " + serverPort );
         }
-                
+
 		System.out.println( getMyMessagePrefix() + " IP address of host is: " + InetAddress.getLocalHost() );
 		System.out.println( getMyMessagePrefix() + " try to start ECHO server on port " + serverPort );
 		System.out.println( getMyMessagePrefix() + " socket timeout will be set to " + myTimeout );
@@ -59,15 +59,15 @@ public class MyEchoServer extends Thread {
 			try {
 				while (serverContinue) {
 					serverSocket.setSoTimeout(myTimeout);
-					if ( quietFlag == 0 ) { 
+					if ( quietFlag == 0 ) {
 					   System.out.println(getMyMessagePrefix() + " waiting for connection(s) - " + serverSocket.getInetAddress() + " on port " + serverSocket.getLocalPort() );
 					}
 					try {
 						new MyEchoServer(serverSocket.accept());
 					} catch (SocketTimeoutException ste) {
-						if ( quietFlag == 0 ) { 
+						if ( quietFlag == 0 ) {
 						   System.out.println(getMyMessagePrefix() + " timeout occurred - check for pending requests");
-						}   
+						}
 					}
 				}
 			} catch (IOException e) {
@@ -92,19 +92,19 @@ public class MyEchoServer extends Thread {
 		clientSocket = clientSoc;
 		start();
 	}
-	
-	
+
+
 	public static String getMyMessagePrefix() {
 
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date date = new Date();
 		return dateFormat.format(date);
-		
+
 	}
 
-	
+
 	public static void usage() {
-		
+
 		System.out.println( getMyMessagePrefix() + " Usage: myEchoServer [options] <port>" );
 		System.out.println( getMyMessagePrefix() + " where:" );
 		System.out.println( getMyMessagePrefix() + "  options   optional command line options" );
@@ -114,10 +114,10 @@ public class MyEchoServer extends Thread {
 		System.out.println( getMyMessagePrefix() + "  -q        disable loging of timeout and waiting messages" );
 		System.out.println( getMyMessagePrefix() + "" );
 		System.exit(1);
-		
+
 	}
 
-	
+
 	public void run() {
 		System.out.println(getMyMessagePrefix() + " new communication thread started for " + clientSocket.getInetAddress() );
 
@@ -152,4 +152,3 @@ public class MyEchoServer extends Thread {
 	}
 
 }
-
